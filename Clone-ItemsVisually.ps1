@@ -10,8 +10,9 @@ $result =
         -OkButtonName "Clone"
 
 if ($result -eq "ok") {
-    $targetName = $source.Name
-    
+
+    # make sure the target name is unique
+    $targetName = $source.Name    
     if (Test-Path "$($target.ProviderPath)\$($targetName)"){
         $targetName = "Copy of $($targetName)"
 
@@ -25,7 +26,10 @@ if ($result -eq "ok") {
         }
     }
 
+    # make the clone
     $clone = New-ItemClone -Item $source -Destination $target -Name $targetName -Recurse
+    
+    # Protect if the checkbox says so
     if($readonly){
         gci -Path $clone.ProviderPath -WithParent | Protect-Item 
     }
